@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    tools:context=".MainActivity">
+
+    <ImageButton
+        android:id="@+id/ConnectButton"
+        android:layout_width="300dp"
+        android:layout_height="51dp"
+        android:layout_marginStart="56dp"
+        android:layout_marginEnd="55dp"
+        android:layout_marginBottom="15dp"
+        android:adjustViewBounds="true"
+        android:background="@android:color/transparent"
+        android:scaleType="fitXY"
+        android:src="@drawable/connect"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/TextInput"
+        android:layout_width="300dp"
+        android:layout_height="46dp"
+        android:layout_marginStart="29dp"
+        android:layout_marginEnd="28dp"
+        android:layout_marginBottom="15dp"
+        android:background="@android:color/transparent"
+        android:ems="10"
+        android:fontFamily="@font/robotoblack"
+        android:gravity="center"
+        android:hint="Send Your Text Here"
+        android:textCursorDrawable="@drawable/cursor_color"
+        android:inputType="text"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#808080"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="300dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="55dp"
+        android:layout_marginEnd="56dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageButton
+            android:id="@+id/BrightnessPlus"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:adjustViewBounds="true"
+            android:background="@android:color/transparent"
+            android:scaleType="fitXY"
+            android:src="@drawable/brightness_plus" />
+
+        <ImageButton
+            android:id="@+id/PlusButton"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_weight="1"
+            android:visibility="invisible"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <ImageButton
+            android:id="@+id/OutputSelect"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:adjustViewBounds="true"
+            android:background="@android:color/transparent"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/output" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="300dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="55dp"
+        android:layout_marginEnd="56dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TableLayout
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            tools:visibility="invisible">
+            <TableRow android:layout_width="match_parent" android:layout_height="match_parent" />
+            <TableRow android:layout_width="match_parent" android:layout_height="match_parent" />
+            <TableRow android:layout_width="match_parent" android:layout_height="match_parent" />
+            <TableRow android:layout_width="match_parent" android:layout_height="match_parent" />
+        </TableLayout>
+
+        <ImageButton
+            android:id="@+id/ModeSelect"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:adjustViewBounds="true"
+            android:background="@android:color/transparent"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/mode" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="300dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="55dp"
+        android:layout_marginEnd="56dp"
+        android:layout_marginBottom="14dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/Powered"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageButton
+            android:id="@+id/BrightnessMin"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:adjustViewBounds="true"
+            android:background="@android:color/transparent"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/brightness_minus" />
+
+        <ImageButton
+            android:id="@+id/MinButton"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_weight="1"
+            android:visibility="invisible"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <ImageButton
+            android:id="@+id/SpeedSelect"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:adjustViewBounds="true"
+            android:background="@android:color/transparent"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/speed" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout4"
+        android:layout_width="300dp"
+        android:layout_height="51dp"
+        android:layout_marginStart="56dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="15dp"
+        app:layout_constraintBottom_toTopOf="@+id/ConnectButton"
+        app:layout_constraintEnd_toStartOf="@+id/linearLayout5"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="NotSibling">
+
+        <ImageButton
+            android:id="@+id/SendButton"
+            android:layout_width="138dp"
+            android:layout_height="51dp"
+            android:adjustViewBounds="true"
+            android:background="@android:color/transparent"
+            android:scaleType="fitXY"
+            android:src="@drawable/send" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout5"
+            android:layout_width="24dp"
+            android:layout_height="51dp"
+            android:orientation="vertical"
+            tools:visibility="invisible"></LinearLayout>
+
+        <ImageButton
+            android:id="@+id/StopButton"
+            android:layout_width="138dp"
+            android:layout_height="51dp"
+            android:adjustViewBounds="true"
+            android:background="@android:color/transparent"
+            android:scaleType="fitXY"
+            android:src="@drawable/stop" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/Powered"
+        android:layout_width="300dp"
+        android:layout_height="49dp"
+        android:layout_marginStart="29dp"
+        android:layout_marginEnd="28dp"
+        android:layout_marginBottom="25dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/group_1" />
+
+    <ImageView
+        android:id="@+id/imageView7"
+        android:layout_width="300dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="29dp"
+        android:layout_marginTop="52dp"
+        android:layout_marginEnd="28dp"
+        android:layout_marginBottom="13dp"
+        app:layout_constraintBottom_toTopOf="@+id/TextInput"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/group_2" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
