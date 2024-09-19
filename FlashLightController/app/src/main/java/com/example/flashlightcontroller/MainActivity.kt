@@ -70,6 +70,9 @@ class MainActivity : AppCompatActivity() {
         setupButton(R.id.StopButton)
         setupButton(R.id.SpeedSelect)
 
+        FunctionalButton(R.id.SendButton)
+        FunctionalButton(R.id.ConnectButton)
+
         // Set up brightness buttons with loop-based functionality
         setupLoopButton(R.id.BrightnessMin, R.id.MinButton)
         setupLoopButton(R.id.BrightnessPlus, R.id.PlusButton)
@@ -106,6 +109,18 @@ class MainActivity : AppCompatActivity() {
         button.setOnClickListener(buttonClickListenerCommand)
     }
 
+    // Method to set the click listener for each function button
+    private fun FunctionalButton(buttonId: Int) {
+        val button = findViewById<ImageButton>(buttonId)
+        button.setOnTouchListener { v, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> v.alpha = 0.2f // Set opacity to 20% when pressed
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> v.alpha = 1.0f // Set opacity to 100% when released
+            }
+            false // Returning false ensures the click event is processed
+        }
+    }
+
     // Method to set up a button with loop-based command sending
     private fun setupLoopButton(buttonId: Int, targetButtonId: Int) {
         val button = findViewById<ImageButton>(buttonId)
@@ -134,7 +149,7 @@ class MainActivity : AppCompatActivity() {
                 Thread {
                     while (isMinButtonPressed) {
                         bluetoothHandler?.sendBluetoothCommand(command)
-                        Thread.sleep(200) // Loop every 200ms
+                        Thread.sleep(100) // Loop every 200ms
                     }
                 }.start()
             }
@@ -143,7 +158,7 @@ class MainActivity : AppCompatActivity() {
                 Thread {
                     while (isPlusButtonPressed) {
                         bluetoothHandler?.sendBluetoothCommand(command)
-                        Thread.sleep(200) // Loop every 200ms
+                        Thread.sleep(100) // Loop every 200ms
                     }
                 }.start()
             }
