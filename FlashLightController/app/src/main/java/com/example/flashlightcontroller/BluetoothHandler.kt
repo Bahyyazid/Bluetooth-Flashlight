@@ -17,52 +17,48 @@ class BluetoothHandler(private val context: Context) {
     private var outputStream: OutputStream? = null
     private val handlerThread: HandlerThread = HandlerThread("BluetoothHandlerThread").apply { start() }
     private val handler: Handler = Handler(handlerThread.looper)
-    var isConnected = false // Connection flag
-
-    private var currentDevice: BluetoothDevice? = null // Track the current connected device
-    private var retryAttempts = 0 // Retry counter
+    var isConnected = false
+    private var currentDevice: BluetoothDevice? = null
+    private var retryAttempts = 0
 
     val pairedDevices: Set<BluetoothDevice>
         get() = bluetoothAdapter.bondedDevices
 
-    // Connect to the selected Bluetooth device
     fun connectToDevice(device: BluetoothDevice) {
-        currentDevice = device // Store the connected device
+        currentDevice = device
         Toast.makeText(context, "Connecting to ${device.name}", Toast.LENGTH_SHORT).show()
 
         handler.post {
             try {
-                closeConnection() // Ensure any existing connection is closed before starting a new one
+                closeConnection()
                 bluetoothSocket = device.createRfcommSocketToServiceRecord(HC05_UUID)
-                bluetoothSocket?.connect() // Blocking call, handled on background thread
+                bluetoothSocket?.connect()
 
                 outputStream = bluetoothSocket?.outputStream
                 isConnected = true
-                retryAttempts = 0 // Reset retry attempts on successful connection
+                retryAttempts = 0
                 showToastOnUi("Connected to ${device.name}")
             } catch (e: IOException) {
                 isConnected = false
                 e.printStackTrace()
                 showToastOnUi("Failed to connect to ${device.name}. Retrying...")
-                retryConnection() // Retry connection
+                retryConnection()
             }
         }
     }
 
-    // Retry Bluetooth connection with limited attempts
     private fun retryConnection() {
-        if (currentDevice != null && retryAttempts < 5) { // Limit retries to 5 attempts
+        if (currentDevice != null && retryAttempts < 5) {
             retryAttempts++
             handler.postDelayed({
                 showToastOnUi("Reconnecting to ${currentDevice?.name} (Attempt $retryAttempts)...")
-                connectToDevice(currentDevice!!) // Try reconnecting to the device
-            }, 3000) // Wait 3 seconds before retrying
+                connectToDevice(currentDevice!!)
+            }, 3000)
         } else {
             showToastOnUi("Failed to reconnect after $retryAttempts attempts.")
         }
     }
 
-    // Method to send Bluetooth commands asynchronously
     fun sendBluetoothCommand(command: String) {
         if (isConnected && outputStream != null) {
             handler.post {
@@ -73,7 +69,7 @@ class BluetoothHandler(private val context: Context) {
                     isConnected = false
                     e.printStackTrace()
                     showToastOnUi("Connection lost. Trying to reconnect...")
-                    retryConnection() // Attempt to reconnect if sending fails
+                    retryConnection()
                 }
             }
         } else {
@@ -81,15 +77,13 @@ class BluetoothHandler(private val context: Context) {
         }
     }
 
-    // Validate message content to avoid unsupported characters
     fun validateMessage(message: String): Boolean {
         return message.matches("[a-zA-Z0-9.,? ]+".toRegex())
     }
 
-    // Close Bluetooth connection and release resources
     fun closeConnection() {
         try {
-            bluetoothSocket?.close() // Close the socket to ensure it's properly released
+            bluetoothSocket?.close()
             outputStream = null
             bluetoothSocket = null
             isConnected = false
@@ -98,7 +92,6 @@ class BluetoothHandler(private val context: Context) {
         }
     }
 
-    // Utility method to show Toast on the main thread
     private fun showToastOnUi(message: String) {
         (context as? MainActivity)?.runOnUiThread {
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
