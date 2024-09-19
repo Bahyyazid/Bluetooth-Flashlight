@@ -18,24 +18,17 @@ class MainActivity : AppCompatActivity() {
     private var bluetoothHandler: BluetoothHandler? = null
     private var connectButton: ImageButton? = null
     private var pairedDevicesDialog: AlertDialog? = null
-
-    // SparseArray to map button IDs to their corresponding Bluetooth commands
     private val buttonCommandMap = SparseArray<String>()
-
-    // Variables to control the loop for MinButton and PlusButton
     private var isMinButtonPressed = false
     private var isPlusButtonPressed = false
-
-    // Handler for periodic connection status checks
     private val handler = Handler(Looper.getMainLooper())
     private val connectionCheckRunnable = object : Runnable {
         override fun run() {
             checkBluetoothConnectionStatus()
-            handler.postDelayed(this, 3000) // Check every 3 seconds
+            handler.postDelayed(this, 3000)
         }
     }
 
-    // Reusable click listener for buttons
     private val buttonClickListenerCommand = View.OnClickListener { v: View ->
         val command = buttonCommandMap[v.id]
         if (command != null) {
@@ -47,14 +40,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Set status bar color to black
         window.statusBarColor = resources.getColor(android.R.color.black, null)
 
         bluetoothHandler = BluetoothHandler(this)
         textInput = findViewById(R.id.TextInput)
         connectButton = findViewById(R.id.ConnectButton)
 
-        // Initialize button-command mappings
         buttonCommandMap.put(R.id.MinButton, "<")
         buttonCommandMap.put(R.id.PlusButton, ">")
         buttonCommandMap.put(R.id.ModeSelect, "#")
@@ -62,7 +53,6 @@ class MainActivity : AppCompatActivity() {
         buttonCommandMap.put(R.id.StopButton, "*")
         buttonCommandMap.put(R.id.SpeedSelect, "^")
 
-        // Set up buttons and apply listener
         setupButton(R.id.MinButton)
         setupButton(R.id.PlusButton)
         setupButton(R.id.ModeSelect)
@@ -73,73 +63,65 @@ class MainActivity : AppCompatActivity() {
         FunctionalButton(R.id.SendButton)
         FunctionalButton(R.id.ConnectButton)
 
-        // Set up brightness buttons with loop-based functionality
         setupLoopButton(R.id.BrightnessMin, R.id.MinButton)
         setupLoopButton(R.id.BrightnessPlus, R.id.PlusButton)
 
-        // Handle the SendButton to send text from TextInput
         val sendButton = findViewById<ImageButton>(R.id.SendButton)
         sendButton.setOnClickListener {
             val message = textInput?.text.toString().trim()
             if (bluetoothHandler?.validateMessage(message) == true) {
                 bluetoothHandler?.sendBluetoothCommand(message)
-                textInput?.setText("") // Clear the input after sending
+                textInput?.setText("")
             } else {
                 Toast.makeText(this, "Invalid characters in the message.", Toast.LENGTH_SHORT).show()
             }
         }
 
-        // Set OnClickListener for ConnectButton to display paired devices
         connectButton?.setOnClickListener { displayPairedDevices() }
 
-        // Start periodic connection checks
         handler.post(connectionCheckRunnable)
     }
 
-    // Method to set the click listener for each button
     private fun setupButton(buttonId: Int) {
         val button = findViewById<ImageButton>(buttonId)
         button.setOnTouchListener { v, event ->
             when (event.action) {
-                MotionEvent.ACTION_DOWN -> v.alpha = 0.2f // Set opacity to 20% when pressed
-                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> v.alpha = 1.0f // Set opacity to 100% when released
+                MotionEvent.ACTION_DOWN -> v.alpha = 0.2f
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> v.alpha = 1.0f
             }
-            false // Returning false ensures the click event is processed
+            false
         }
         button.setOnClickListener(buttonClickListenerCommand)
     }
 
-    // Method to set the click listener for each function button
     private fun FunctionalButton(buttonId: Int) {
         val button = findViewById<ImageButton>(buttonId)
         button.setOnTouchListener { v, event ->
             when (event.action) {
-                MotionEvent.ACTION_DOWN -> v.alpha = 0.2f // Set opacity to 20% when pressed
-                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> v.alpha = 1.0f // Set opacity to 100% when released
+                MotionEvent.ACTION_DOWN -> v.alpha = 0.2f
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> v.alpha = 1.0f
             }
-            false // Returning false ensures the click event is processed
+            false
         }
     }
 
-    // Method to set up a button with loop-based command sending
     private fun setupLoopButton(buttonId: Int, targetButtonId: Int) {
         val button = findViewById<ImageButton>(buttonId)
         button.setOnTouchListener { v, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
                     v.alpha = 0.2f
-                    startCommandLoop(targetButtonId) // Start command loop when pressed
+                    startCommandLoop(targetButtonId)
                 }
                 MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                     v.alpha = 1.0f
-                    stopCommandLoop(targetButtonId) // Stop command loop when released
+                    stopCommandLoop(targetButtonId)
                 }
             }
-            true // Return true to consume the event
+            true
         }
     }
 
-    // Start the loop to send the command repeatedly while the button is pressed
     private fun startCommandLoop(targetButtonId: Int) {
         val command = buttonCommandMap[targetButtonId] ?: return
 
@@ -149,7 +131,7 @@ class MainActivity : AppCompatActivity() {
                 Thread {
                     while (isMinButtonPressed) {
                         bluetoothHandler?.sendBluetoothCommand(command)
-                        Thread.sleep(100) // Loop every 200ms
+                        Thread.sleep(100)
                     }
                 }.start()
             }
@@ -158,14 +140,13 @@ class MainActivity : AppCompatActivity() {
                 Thread {
                     while (isPlusButtonPressed) {
                         bluetoothHandler?.sendBluetoothCommand(command)
-                        Thread.sleep(100) // Loop every 200ms
+                        Thread.sleep(100)
                     }
                 }.start()
             }
         }
     }
 
-    // Stop the loop when the button is released
     private fun stopCommandLoop(targetButtonId: Int) {
         when (targetButtonId) {
             R.id.MinButton -> isMinButtonPressed = false
@@ -173,7 +154,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // Display paired Bluetooth devices in a list dialog
     private fun displayPairedDevices() {
         val pairedDevices = bluetoothHandler?.pairedDevices ?: emptyList()
         pairedDevicesList.clear()
@@ -193,29 +173,26 @@ class MainActivity : AppCompatActivity() {
             bluetoothHandler?.connectToDevice(selectedDevice)
         }
 
-        // Show paired devices list in a dialog
         val builder = AlertDialog.Builder(this)
         builder.setView(listViewPairedDevices)
         pairedDevicesDialog = builder.show()
     }
 
-    // Check the Bluetooth connection status and update the UI
     private fun checkBluetoothConnectionStatus() {
         if (bluetoothHandler?.isConnected == true) {
-            connectButton?.setImageResource(R.drawable.connecteds) // Show connected icon
-            pairedDevicesDialog?.dismiss() // Close the dialog after connection attempt
+            connectButton?.setImageResource(R.drawable.connecteds)
+            pairedDevicesDialog?.dismiss()
         } else {
-            connectButton?.setImageResource(R.drawable.connect) // Show disconnected icon
+            connectButton?.setImageResource(R.drawable.connect)
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
         bluetoothHandler?.closeConnection()
-        handler.removeCallbacks(connectionCheckRunnable) // Stop connection checks
+        handler.removeCallbacks(connectionCheckRunnable)
     }
 
-    // Adapter for displaying paired devices in a ListView
     private inner class DeviceAdapter : BaseAdapter() {
         override fun getCount(): Int = pairedDevicesList.size
 
