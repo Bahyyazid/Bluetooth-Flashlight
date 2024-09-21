@@ -28,11 +28,11 @@ int S = 0;
 
 OneButton Button = OneButton(A2,true,true);
 int Max = 255;
-int Min = 5;
+int Min = 6;
 int i = 1;
 int p = 0;
 
-int Difference = 5;
+int Difference = 3;
 int CurrentBright = EEPROM.read(0);
 int Brightness = CurrentBright;
 
@@ -44,7 +44,7 @@ unsigned long PreviousTimeB = 0;
 
 void setup() {
  //EEPROM.write(1,0);
- //EEPROM.write(0,50);  //remove comments (//) if you want to install to a new microcontroller     
+ //EEPROM.write(0,60);  //remove comments (//) if you want to install to a new microcontroller     
  pinMode (LED,OUTPUT);
  pinMode (Laser,OUTPUT);  
  pinMode (CLK,INPUT);
