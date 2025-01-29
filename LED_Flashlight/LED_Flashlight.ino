@@ -42,9 +42,7 @@ unsigned long PreviousTime = 0;    //Knob millis
 unsigned long PreviousTimeS = 0;    //Knob Strobe
 unsigned long PreviousTimeB = 0;
 
-void setup() {
- //EEPROM.write(1,0);
- //EEPROM.write(0,60);  //remove comments (//) if you want to install to a new microcontroller     
+void setup() {    
  pinMode (LED,OUTPUT);
  pinMode (Laser,OUTPUT);  
  pinMode (CLK,INPUT);
@@ -104,7 +102,7 @@ void loop() {
   }   
 }
 void Status(){
-  if(State == 0){
+  if(State == 0 || State >=6){
    normal(); 
   }else if(State == 1){ 
    Strobe(); 
