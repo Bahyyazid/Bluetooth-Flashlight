@@ -102,7 +102,7 @@ void loop() {
   }   
 }
 void Status(){
-  if(State == 0 || State >=6){
+  if(State == 0){
    normal(); 
   }else if(State == 1){ 
    Strobe(); 
@@ -112,7 +112,7 @@ void Status(){
    Flash();
   }else if(State == 4){
    SOS();
-  }else if(State == 5){
+  }else if(State >= 5){
    State = 0;
   }
 }
